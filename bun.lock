@@ -5,6 +5,7 @@
     "": {
       "name": "monorepo-deploy",
       "dependencies": {
+        "@prisma/client": "^7.7.0",
         "prisma": "^7.7.0",
       },
       "devDependencies": {
@@ -32,6 +33,7 @@
       "name": "web",
       "version": "0.1.0",
       "dependencies": {
+        "@prisma/client": "^7.7.0",
         "@repo/ui": "*",
         "db": "*",
         "next": "16.2.0",
@@ -48,7 +50,7 @@
         "typescript": "5.9.2",
       },
     },
-    "apps/ws": {
+    "apps/websocket": {
       "name": "ws",
       "dependencies": {
         "db": "*",
@@ -65,6 +67,7 @@
       "dependencies": {
         "@prisma/adapter-pg": "^7.7.0",
         "@prisma/client": "^7.7.0",
+        "dotenv": "^17.4.2",
         "pg": "^8.16.3",
       },
       "devDependencies": {
@@ -1032,7 +1035,7 @@
 
     "word-wrap": ["word-wrap@1.2.5", "", {}, "sha512-BN22B5eaMMI9UMtjrGd5g5eCYPpCPDUy0FJXbYsaT5zYxjFOckS53SQDE3pWkVoWpHXVb3BrYcEN4Twa55B5cA=="],
 
-    "ws": ["ws@workspace:apps/ws"],
+    "ws": ["ws@workspace:apps/websocket"],
 
     "xtend": ["xtend@4.0.2", "", {}, "sha512-LKYU1iAXJXUgAXn9URjiu+MWhyUXHsvfp7mcuYm9dSUKK0/CjtrUwFAxD82/mCWbtLsGjFIad0wIsod4zrTAEQ=="],
 
