@@ -2,7 +2,7 @@ name: Deploy the backend
 on:
   push:
     branches: [ main ]
-jobs: 
+jobs:
   build:
     runs-on: ubuntu-latest
     permissions:
@@ -18,22 +18,23 @@ jobs:
           username: ${{ secrets.DOCKERHUB_USERNAME }}
           password: ${{ secrets.DOCKERHUB_TOKEN }}
       
-      - name: Build and push 
+      - name: Build and push
         uses: docker/build-push-action@v6
         with:
           context: .
           file: ./docker/Dockerfile.backend
           push: true
           tags: ${{ secrets.DOCKERHUB_USERNAME }}/todo-app-backend:${{ github.sha }}
-      - name: Deploy to the VM
-  run: |
-    echo "${{ secrets.SSH_PRIVATE_KEY }}" > key.pem
-    chmod 600 key.pem
 
-    ssh -o StrictHostKeyChecking=no -i key.pem ubuntu@3.85.234.151 << 'EOF'
-      docker pull ${{ secrets.DOCKERHUB_USERNAME }}/todo-app-backend:${{ github.sha }}
-      docker stop backend || true
-      docker rm backend || true
-      docker run -d -p 8080:5000 --env-file .env --name backend ${{ secrets.DOCKERHUB_USERNAME }}/todo-app-backend:${{ github.sha }}
-    EOF
+      - name: Deploy to the VM
+        run: |
+          echo "${{ secrets.SSH_PRIVATE_KEY }}" > key.pem
+          chmod 600 key.pem
+
+          ssh -o StrictHostKeyChecking=no -i key.pem ubuntu@3.85.234.151 << 'EOF'
+            docker pull ${{ secrets.DOCKERHUB_USERNAME }}/todo-app-backend:${{ github.sha }}
+            docker stop backend || true
+            docker rm backend || true
+            docker run -d -p 8080:8080 --env-file .env --name backend ${{ secrets.DOCKERHUB_USERNAME }}/todo-app-backend:${{ github.sha }}
+          EOF
       

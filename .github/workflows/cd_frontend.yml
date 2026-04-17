@@ -2,7 +2,7 @@ name: Deploy the frontend
 on:
   push:
     branches: [ main ]
-jobs: 
+jobs:
   build:
     runs-on: ubuntu-latest
     permissions:
@@ -18,12 +18,24 @@ jobs:
           username: ${{ secrets.DOCKERHUB_USERNAME }}
           password: ${{ secrets.DOCKERHUB_TOKEN }}
       
-      - name: Build and push 
+      - name: Build and push
         uses: docker/build-push-action@v6
         with:
           context: .
-          file: ./docker/Dockerfile.backend
+          file: ./docker/Dockerfile.frontend
           build-args:
-            -DATABASE_URL=${{secrets.DATABASE_URL}}
+            - DATABASE_URL=${{ secrets.DATABASE_URL }}
           push: true
-          tags: ${{ secrets.DOCKERHUB_USERNAME }}/todo-app-backend:${{ github.sha }}
+          tags: ${{ secrets.DOCKERHUB_USERNAME }}/todo-app-frontend:${{ github.sha }}
+
+      - name: Deploy to the VM
+        run: |
+          echo "${{ secrets.SSH_PRIVATE_KEY }}" > key.pem
+          chmod 600 key.pem
+
+          ssh -o StrictHostKeyChecking=no -i key.pem ubuntu@3.85.234.151 << 'EOF'
+            docker pull ${{ secrets.DOCKERHUB_USERNAME }}/todo-app-frontend:${{ github.sha }}
+            docker stop frontend || true
+            docker rm frontend || true
+            docker run -d -p 3000:3000 --name frontend ${{ secrets.DOCKERHUB_USERNAME }}/todo-app-frontend:${{ github.sha }}
+          EOF
