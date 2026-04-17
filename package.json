@@ -8,8 +8,8 @@
     "format": "prettier --write \"**/*.{ts,tsx,md}\"",
     "check-types": "turbo run check-types",
     "start:web": "cd apps/web && bun run start",
-    "start:backend": "cd apps/backend && bun run start",
-    "start:websocket": "cd apps/websocket && bun run start"
+    "start:backend": "cd apps/backend && bun run index.ts",
+    "start:websocket": "cd apps/websocket && bun run index.ts"
   },
   "devDependencies": {
     "dotenv": "^17.4.2",
