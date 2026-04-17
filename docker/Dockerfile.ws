@@ -7,11 +7,13 @@ COPY ./bun.lock ./bun.lock
 
 COPY ./package.json ./package.json
 COPY ./turbo.json ./turbo.json
+COPY ./prisma ./prisma
+COPY ./prisma.config.ts ./prisma.config.ts
 
 COPY ./apps/websocket ./apps/websocket
 
 RUN bun install
-RUN bun run db:generate
+RUN bunx prisma generate
 
 EXPOSE 8081
 
